@@ -27,4 +27,15 @@ contract Lottery{
         start_date = block.timestamp;
     }
 
+    function buy_ticket() public payable returns(uint256){
+        require(msg.value == ticket_price);
+        require(block.timestamp < startDate + (day*86400));
+        owner.transfer(msg.value/5);
+        ticket_code++;
+        invested+=(msg.value*95)/100;
+        tickets[ticket_code] = Ticket(ticket_code, block.timestamp, msg.sender, false);
+        emit buyTicket(msg.sender, msg.value, ticket_code);
+        return ticket_code;
+     }
+
 }
