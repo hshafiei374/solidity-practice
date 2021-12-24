@@ -29,13 +29,29 @@ contract Lottery{
 
     function buy_ticket() public payable returns(uint256){
         require(msg.value == ticket_price);
-        require(block.timestamp < startDate + (day*86400));
+        require(block.timestamp < start_date + (day*86400));
         owner.transfer(msg.value/5);
         ticket_code++;
         invested+=(msg.value*95)/100;
-        tickets[ticket_code] = Ticket(ticket_code, block.timestamp, msg.sender, false);
+        tickets[ticket_code] = Ticket(ticket_code, block.timestamp, payable(msg.sender), false);
         emit buyTicket(msg.sender, msg.value, ticket_code);
         return ticket_code;
+     }
+
+     function start_lottery() public{
+         require(msg.sender == owner);
+         require(block.timestamp > start_date + (day*86400));
+         require(is_ended == false);
+         uint256 winnerTicketCode = random(ticket_code);
+         tickets[winnerTicketCode].win = true;
+         tickets[winnerTicketCode].member.transfer(invested);
+         is_ended = true;
+         emit winner(tickets[winnerTicketCode].member, invested, winnerTicketCode);
+     }
+
+     function random(uint256 count) private view returns(uint256){
+        uint rand =  uint( keccak256( abi.encodePacked(block.timestamp,block.difficulty)  ) ) % count;
+        return rand;
      }
 
 }
