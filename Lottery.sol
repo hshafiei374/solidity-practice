@@ -20,5 +20,11 @@ contract Lottery{
 
     event buyTicket(address indexed addr, uint256 amount, uint256 ticket_code);
     event winner(address indexed addr, uint256 amount, uint256 ticket_code);
-    
+
+    constructor(uint16 _day){
+        day = _day;
+        owner = msg.sender;
+        start_date = block.timestamp;
+    }
+
 }
