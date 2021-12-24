@@ -17,4 +17,8 @@ contract Lottery{
     uint256 public start_date;
     uint16 public day;
     bool public is_ended=false;  
+
+    event buyTicket(address indexed addr, uint256 amount, uint256 ticket_code);
+    event winner(address indexed addr, uint256 amount, uint256 ticket_code);
+    
 }
