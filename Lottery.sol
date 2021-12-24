@@ -23,7 +23,7 @@ contract Lottery{
 
     constructor(uint16 _day){
         day = _day;
-        owner = msg.sender;
+        owner = payable(msg.sender);
         start_date = block.timestamp;
     }
 
